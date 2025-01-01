@@ -17,6 +17,8 @@
 #define G_0_OPTION_OR_ELSE(type) g_0_option__##type##__or_else
 #define G_0_OPTION_AND(type) g_0_option__##type##__and
 #define G_0_OPTION_AND_THEN(type) g_0_option__##type##__and_then
+#define G_0_OPTION_XOR(type) g_0_option__##type##__xor
+#define G_0_OPTION_MAP(type) g_0_option__##type##__map
 
 #define G_0_OPTION_DEFINE_TYPE(type)                                           \
   typedef union {                                                              \
@@ -114,6 +116,29 @@
     if (option->is_some) {                                                     \
       return alternative(G_0_DEBUG_FUNCTION_ARGUMENT_PRELUDE &                 \
                          option->value.some);                                  \
+    }                                                                          \
+    return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
+  }                                                                            \
+  g_0_option__##type##__t g_0_option_##type##__xor(                            \
+      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
+      g_0_option__##type##__t *alternative) {                                  \
+    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+    if (option->is_some && alternative->is_some) {                             \
+      return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};    \
+    } else if (option->is_some) {                                              \
+      return *option;                                                          \
+    } else if (alternative->is_some) {                                         \
+      return *alternative;                                                     \
+    }                                                                          \
+    return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
+  }                                                                            \
+  g_0_option__##type##__t g_0_option_##type##__map(                            \
+      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
+      g_0_option__##type##__t (*map)(                                          \
+          G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE type * value)) {                \
+    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+    if (option->is_some) {                                                     \
+      return map(G_0_DEBUG_FUNCTION_ARGUMENT_PRELUDE & option->value.some);    \
     }                                                                          \
     return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
   }
