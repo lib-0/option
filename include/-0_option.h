@@ -1,7 +1,7 @@
 #ifndef G_0_OPTION_H
 #define G_0_OPTION_H
 
-#include "-0_debug.h"
+#include "-0/debug.h"
 
 #define G_0_OPTION(type) g_0_option__##type##__t
 
