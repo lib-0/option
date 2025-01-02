@@ -1,7 +1,7 @@
 #ifndef G_0_OPTION_H
 #define G_0_OPTION_H
 
-#include "-0/debug.h"
+#include "-0_utils.h"
 
 #define G_0_OPTION(type) g_0_option__##type##__t
 
@@ -29,100 +29,76 @@
     _Bool is_some;                                                             \
     g_0_option__##type##__value value;                                         \
   } g_0_option__##type##__t;                                                   \
-  type g_0_option__##type##__unwrap(                                           \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t option) {   \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
-    if (!option.is_some) {                                                     \
-      g_0_debug_die(G_0_DEBUG_FUNCTION_ARGUMENT_PRELUDE "unwrap failed");      \
-    }                                                                          \
+  static inline type g_0_option__##type##__unwrap(                             \
+      g_0_option__##type##__t option) {                                        \
+    g_0_assert(option.is_some);                                                \
     return option.value.some;                                                  \
   }                                                                            \
-  g_0_option__##type##__t g_0_option__##type##__some(                          \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE type value) {                       \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t g_0_option__##type##__some(            \
+      type value) {                                                            \
     return (g_0_option__##type##__t){.is_some = 1, .value = {.some = value}};  \
   }                                                                            \
-  g_0_option__##type##__t g_0_option__##type##__none(                          \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE0) {                                 \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t g_0_option__##type##__none(void) {     \
     return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
   }                                                                            \
-  _Bool g_0_option__##type##__is_some(                                         \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option) {  \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline _Bool g_0_option__##type##__is_some(                           \
+      g_0_option__##type##__t *option) {                                       \
     return option->is_some;                                                    \
   }                                                                            \
-  _Bool g_0_option__##type##__is_none(                                         \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option) {  \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline _Bool g_0_option__##type##__is_none(                           \
+      g_0_option__##type##__t *option) {                                       \
     return !option->is_some;                                                   \
   }                                                                            \
-  type g_0_option__##type##__unwrap_or(                                        \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t option,     \
-      type *fallback) {                                                        \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline type g_0_option__##type##__unwrap_or(                          \
+      g_0_option__##type##__t option, type *fallback) {                        \
     if (!option.is_some) {                                                     \
       return *fallback;                                                        \
     }                                                                          \
     return option.value.some;                                                  \
   }                                                                            \
-  type g_0_option__##type##__unwrap_or_else(                                   \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t option,     \
-      type (*fallback)(G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE0)) {               \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline type g_0_option__##type##__unwrap_or_else(                     \
+      g_0_option__##type##__t option, type (*fallback)(void)) {                \
     if (!option.is_some) {                                                     \
-      return fallback(G_0_DEBUG_FUNCTION_ARGUMENT_PRELUDE0);                   \
+      return fallback();                                                       \
     }                                                                          \
     return option.value.some;                                                  \
   }                                                                            \
-  type *g_0_option__##type##__unwrap_unchecked(                                \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option) {  \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline type *g_0_option__##type##__unwrap_unchecked(                  \
+      g_0_option__##type##__t *option) {                                       \
     return &option->value.some;                                                \
   }                                                                            \
-  g_0_option__##type##__t *g_0_option_##type##__or(                            \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
-      g_0_option__##type##__t *fallback) {                                     \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t *g_0_option_##type##__or(              \
+      g_0_option__##type##__t *option, g_0_option__##type##__t *fallback) {    \
     if (option->is_some) {                                                     \
       return option;                                                           \
     }                                                                          \
     return fallback;                                                           \
   }                                                                            \
-  g_0_option__##type##__t g_0_option_##type##__or_else(                        \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
-      g_0_option__##type##__t (*fallback)(                                     \
-          G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE0)) {                            \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t g_0_option_##type##__or_else(          \
+      g_0_option__##type##__t *option,                                         \
+      g_0_option__##type##__t (*fallback)(void)) {                             \
     if (option->is_some) {                                                     \
       return *option;                                                          \
     }                                                                          \
-    return fallback(G_0_DEBUG_FUNCTION_ARGUMENT_PRELUDE0);                     \
+    return fallback();                                                         \
   }                                                                            \
-  g_0_option__##type##__t g_0_option_##type##__and(                            \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
-      g_0_option__##type##__t *alternative) {                                  \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t g_0_option_##type##__and(              \
+      g_0_option__##type##__t *option, g_0_option__##type##__t *alternative) { \
     if (option->is_some) {                                                     \
       return *alternative;                                                     \
     }                                                                          \
     return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
   }                                                                            \
-  g_0_option__##type##__t g_0_option_##type##__and_then(                       \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
-      g_0_option__##type##__t (*alternative)(                                  \
-          G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE type * option)) {               \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t g_0_option_##type##__and_then(         \
+      g_0_option__##type##__t *option,                                         \
+      g_0_option__##type##__t (*alternative)(type * option)) {                 \
     if (option->is_some) {                                                     \
-      return alternative(G_0_DEBUG_FUNCTION_ARGUMENT_PRELUDE &                 \
-                         option->value.some);                                  \
+      return alternative(&option->value.some);                                 \
     }                                                                          \
     return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
   }                                                                            \
-  g_0_option__##type##__t g_0_option_##type##__xor(                            \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
-      g_0_option__##type##__t *alternative) {                                  \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t g_0_option_##type##__xor(              \
+      g_0_option__##type##__t *option, g_0_option__##type##__t *alternative) { \
     if (option->is_some && alternative->is_some) {                             \
       return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};    \
     } else if (option->is_some) {                                              \
@@ -132,13 +108,11 @@
     }                                                                          \
     return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
   }                                                                            \
-  g_0_option__##type##__t g_0_option_##type##__map(                            \
-      G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE g_0_option__##type##__t *option,    \
-      g_0_option__##type##__t (*map)(                                          \
-          G_0_DEBUG_FUNCTION_PARAMETER_PRELUDE type * value)) {                \
-    G_0_DEBUG_FUNCTION_BODY_PRELUDE;                                           \
+  static inline g_0_option__##type##__t g_0_option_##type##__map(              \
+      g_0_option__##type##__t *option,                                         \
+      g_0_option__##type##__t (*map)(type * value)) {                          \
     if (option->is_some) {                                                     \
-      return map(G_0_DEBUG_FUNCTION_ARGUMENT_PRELUDE & option->value.some);    \
+      return map(&option->value.some);                                         \
     }                                                                          \
     return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
   }

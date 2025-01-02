@@ -27,7 +27,7 @@ usage: set G_THIS for library currently building, like below
 
 #ifdef G_THIS
 
-#if _WIN32 && G_SHARED == 1
+#if defined(_WIN32) && G_SHARED == 1
 #define G_EXPORT __declspec(dllexport)
 #else
 #define G_EXPORT
@@ -35,7 +35,7 @@ usage: set G_THIS for library currently building, like below
 
 #else
 
-#if _WIN32 && G_SHARED == 1
+#if defined(_WIN32) && G_SHARED == 1
 #define G_EXPORT __declspec(dllimport)
 #else
 #define G_EXPORT
