@@ -1,6 +1,10 @@
 #ifndef G_0_OPTION_H
 #define G_0_OPTION_H
 
+#ifndef __cplusplus
+#include <stdbool.h>
+#endif
+
 #include "-0_utils.h"
 
 #define G_0_OPTION(type) g_0_option__##type##__t
@@ -26,7 +30,7 @@
     type some;                                                                 \
   } g_0_option__##type##__value;                                               \
   typedef struct g_0_option__##type {                                          \
-    _Bool is_some;                                                             \
+    bool is_some;                                                              \
     g_0_option__##type##__value value;                                         \
   } g_0_option__##type##__t;                                                   \
   static inline type g_0_option__##type##__unwrap(                             \
@@ -41,11 +45,11 @@
   static inline g_0_option__##type##__t g_0_option__##type##__none(void) {     \
     return (g_0_option__##type##__t){.is_some = 0, .value = {.none = 0}};      \
   }                                                                            \
-  static inline _Bool g_0_option__##type##__is_some(                           \
+  static inline bool g_0_option__##type##__is_some(                            \
       g_0_option__##type##__t *option) {                                       \
     return option->is_some;                                                    \
   }                                                                            \
-  static inline _Bool g_0_option__##type##__is_none(                           \
+  static inline bool g_0_option__##type##__is_none(                            \
       g_0_option__##type##__t *option) {                                       \
     return !option->is_some;                                                   \
   }                                                                            \
